@@ -20,7 +20,7 @@ allowed_origins = [
     "https://127.0.0.1:3000",
 ]
 
-vercel_host = os.getenv("VERCEL_HOST", "bajaj-finserv-assingment.vercel.app")
+vercel_host = os.getenv("VERCEL_FRONTEND", "bajaj-finserv-assingment.vercel.app")
 allowed_origins.extend(
     [
         f"https://{vercel_host}",
