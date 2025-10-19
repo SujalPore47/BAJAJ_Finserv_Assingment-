@@ -1,5 +1,5 @@
 from langchain.agents import create_agent
-from backend.pipeline_for_docement_ingestion.docsProcessing import DocsProcessor
+from ..pipeline_for_docement_ingestion.docsProcessing import DocsProcessor
 import os
 from langchain.tools import tool
 

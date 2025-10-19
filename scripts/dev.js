@@ -211,7 +211,7 @@ async function ensureVenv() {
 }
 
 function startUvicorn() {
-  const uvicornArgs = ['-m', 'uvicorn', 'backend.main:app'];
+  const uvicornArgs = ['-m', 'uvicorn', 'frontend.backend.main:app'];
   if (mode === 'dev') {
     uvicornArgs.push('--reload');
   }
