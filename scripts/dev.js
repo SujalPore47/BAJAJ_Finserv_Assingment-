@@ -13,6 +13,12 @@ if (!supportedModes.has(mode)) {
   process.exit(1);
 }
 
+const skipBackend =
+  mode === 'build' &&
+  (String(process.env.SKIP_BACKEND).toLowerCase() === 'true' ||
+    process.env.SKIP_BACKEND === '1' ||
+    process.env.VERCEL === '1');
+
 const repoRoot = path.resolve(__dirname, '..');
 const frontendDir = path.join(repoRoot, 'frontend');
 const venvDir = path.join(repoRoot, '.venv');
@@ -336,14 +342,20 @@ function cleanupAndExit(signal) {
 
 async function main() {
   try {
-    await ensureVenv();
+    if (!skipBackend) {
+      await ensureVenv();
+    } else {
+      console.log('Skipping backend setup during build.');
+    }
   } catch (error) {
     console.error(error.message || error);
     process.exit(1);
     return;
   }
 
-  uvicornProcess = startUvicorn();
+  if (!skipBackend) {
+    uvicornProcess = startUvicorn();
+  }
   nextProcess = startNext();
 }
 
