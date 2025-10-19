@@ -13,12 +13,7 @@ load_dotenv()
 app = FastAPI()
 
 # Add CORS middleware
-allowed_origins = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "https://localhost:3000",
-    "https://127.0.0.1:3000",
-]
+allowed_origins = []
 
 vercel_host = os.getenv("VERCEL", "bajaj-finserv-assingment.vercel.app")
 allowed_origins.extend(
