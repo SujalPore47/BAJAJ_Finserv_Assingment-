@@ -4,8 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 import json
 from pydantic import BaseModel
 # from concurrent.futures import ThreadPoolExecutor
-from .pipeline_for_docement_ingestion.docsProcessing import DocsProcessor
-from .rag_pipline.google_agent import GoogleAgent
+from pipeline_for_docement_ingestion.docsProcessing import DocsProcessor
+from rag_pipline.google_agent import GoogleAgent
 from dotenv import load_dotenv
 
 load_dotenv()

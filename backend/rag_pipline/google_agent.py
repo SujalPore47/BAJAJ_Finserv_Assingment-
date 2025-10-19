@@ -1,6 +1,6 @@
 from langchain.agents import create_agent
 from dotenv import load_dotenv
-from ..rag_pipline.tools import rag_search_tool
+from rag_pipline.tools import rag_search_tool
 load_dotenv()
 
 
