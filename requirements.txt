@@ -74,7 +74,7 @@ python-dateutil==2.9.0.post0
 python-dotenv==1.1.1
 python-multipart==0.0.20
 pytz==2025.2
-pywin32==311
+pywin32==311; sys_platform == "win32"
 pyxnat==1.6.3
 PyYAML==6.0.3
 qdrant-client==1.15.1
