@@ -11,7 +11,7 @@ from langchain_qdrant import Qdrant
 from qdrant_client import QdrantClient
 from langchain_core.documents import Document
 import logging
-
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -27,6 +27,7 @@ class DocsProcessor:
         self.collection_name = "BAJAJ_FINANCIAL_REPORT_TEST"
         self.client.get_collection(self.collection_name)
         self.vector_store = Qdrant(self.client, self.collection_name, self.embeddings)
+        self.text_splitter = RecursiveCharacterTextSplitter(chunk_size=3000,chunk_overlap=100)
         logging.info("Vector store initialized.")
         self.prompt = """You are an advanced financial document processing OCR system. 
             Your task is to extract **all textual content from the provided document**, preserving **every single detail**. This includes:
@@ -79,7 +80,8 @@ class DocsProcessor:
             return json.loads(response.text)
         except Exception as e:
             logging.error(f"An error occurred during document processing: {e}")
-            raise
+            return {"text": "ERROR PROCESSING THE PAGE", "summary": "NULL"}
+            
 
     def process_image(self, image):
         logging.info("Processing image...")
@@ -114,11 +116,17 @@ class DocsProcessor:
         logging.info("Adding document to vector store...")
         try:
             document = Document(page_content=text, metadata={"summary": summary})
-            self.vector_store.add_documents([document])
-            logging.info("Document added to vector store successfully.")
+            document_chunks = self.text_splitter.split_documents([document])
+            for docs in document_chunks:
+                try:
+                    self.vector_store.add_documents([docs])
+                    logging.info("Document added to vector store successfully.")
+                except Exception as e:
+                    logging.error(f"Failed to add document chunk to vector store: {e}")
+                    continue
         except Exception as e:
             logging.error(f"An error occurred while adding document to vector store: {e}")
-            raise
+            return "ERROR ADDING DOCUMENT TO VECTOR STORE BECAUSE THE CONTEXT TOO LARGE" 
     
     def search_documents(self, query, k=3):
         logging.info(f"Searching documents for query: {query}")
