@@ -24,7 +24,7 @@ class DocsProcessor:
         self.model = genai.GenerativeModel(model_name="gemini-2.0-flash-lite", generation_config=genai.GenerationConfig(response_mime_type="application/json"))
         self.embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
         self.client = QdrantClient(api_key=os.getenv("QUADRANT_API_KEY"), url=os.getenv("QUADRANT_API_KEY_LOCATION"))
-        self.collection_name = "BAJAJ_FINANCIAL_REPORT_TEST"
+        self.collection_name = os.getenv("COLLECTION_NAME", "BAJAJ_FINANCIAL_REPORT_TEST")
         self.client.get_collection(self.collection_name)
         self.vector_store = Qdrant(self.client, self.collection_name, self.embeddings)
         self.text_splitter = RecursiveCharacterTextSplitter(chunk_size=3000,chunk_overlap=100)
