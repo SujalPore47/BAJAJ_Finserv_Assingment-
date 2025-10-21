@@ -5,12 +5,11 @@ from langchain.tools import tool
 from dotenv import load_dotenv
 from tavily import TavilyClient
 load_dotenv()
-
 tavily_client = TavilyClient(api_key=os.getenv("TAVILY_API_KEY"))
-
+docsProcessor = DocsProcessor()
 @tool("rag_search_tool", description="Useful for answering questions about financial documents based on their content.")   
 def rag_search_tool(query: str) -> str:
-    results = DocsProcessor().search_documents(query, k=6)    
+    results = docsProcessor.search_documents(query, k=6)    
     return results
 
 @tool("web_search_tool", description="Useful for answering questions by searching the web for up-to-date information.")   
