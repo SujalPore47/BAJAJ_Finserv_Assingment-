@@ -11,7 +11,13 @@
 🔗 **Live Demo:** [bajaj-finserv-assingment.vercel.app](https://bajaj-finserv-assingment.vercel.app)
 
 ---
-
+## Test output 
+<img src="TestOutputImages\img1.png" width="100%"/>
+<img src="TestOutputImages\img2.png" width="100%"/>
+<img src="TestOutputImages\img3.png" width="100%"/>
+<img src="TestOutputImages\img4.png" width="100%"/>
+<img src="TestOutputImages\img5.png" width="100%"/>
+<img src="TestOutputImages\img6.png" width="100%"/>
 ## 🚀 Overview
 
 The **Bajaj Finserv AMC RAG Chatbot** is an intelligent **Retrieval-Augmented Generation (RAG)** system that answers complex questions about **Bajaj AMC Fund Factsheets**.
