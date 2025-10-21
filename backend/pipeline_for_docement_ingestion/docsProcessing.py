@@ -128,7 +128,7 @@ class DocsProcessor:
             logging.error(f"An error occurred while adding document to vector store: {e}")
             return "ERROR ADDING DOCUMENT TO VECTOR STORE BECAUSE THE CONTEXT TOO LARGE" 
     
-    def search_documents(self, query, k=3):
+    def search_documents(self, query, k=6):
         logging.info(f"Searching documents for query: {query}")
         try:
             retriever = self.vector_store.as_retriever(search_type="mmr", search_kwargs={"k": k})

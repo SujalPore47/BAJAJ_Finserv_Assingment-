@@ -185,10 +185,17 @@ export default function Home() {
     setIsTyping(true);
 
     try {
+      const history = messages.slice(-6);
+      const chatHistory = history
+        .map((msg) => `${msg.sender === "user" ? "User" : "AI"}: ${msg.text}`)
+        .join("\n");
+
+      const query = `**Current user query**:${input}\n**Chat history**:\n${chatHistory}`;
+
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: input }),
+        body: JSON.stringify({ question: query }),
       });
 
       const data = await response.json();
