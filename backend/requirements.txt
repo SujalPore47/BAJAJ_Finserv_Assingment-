@@ -92,6 +92,7 @@ tavily-python
 tenacity==9.1.2
 tqdm==4.67.1
 traits==7.0.2
+tiktoken
 typing_extensions==4.15.0
 typing-inspection==0.4.2
 tzdata==2025.2
