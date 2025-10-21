@@ -7,13 +7,14 @@ from pydantic import BaseModel
 from pipeline_for_docement_ingestion.docsProcessing import DocsProcessor
 from rag_pipline.google_agent import GoogleAgent
 from dotenv import load_dotenv
+from langchain_core.messages import BaseMessage
 
 load_dotenv()
 
 app = FastAPI()
 
 # Add CORS middleware
-allowed_origins = []
+allowed_origins = [""]
 
 vercel_host = os.getenv("VERCEL", "bajaj-finserv-assingment.vercel.app")
 allowed_origins.extend(
@@ -94,6 +95,29 @@ async def chat(request: ChatRequest):
         raise HTTPException(status_code=503, detail="Agent not initialized.")
     try:
         response = google_agent.query(request.question)
+        
+        if "messages" in response and isinstance(response["messages"], list):
+            serializable_messages = []
+            for msg in response["messages"]:
+                if isinstance(msg, BaseMessage):
+                    msg_dict = {
+                        "id": str(msg.id),
+                        "type": msg.type,
+                        "content": str(msg.content),  # Ensure content is always a string
+                    }
+                    if hasattr(msg, 'tool_calls') and msg.tool_calls:
+                        msg_dict['tool_calls'] = msg.tool_calls
+                    if hasattr(msg, 'name') and msg.name:
+                        msg_dict['name'] = msg.name
+                    if hasattr(msg, 'response_metadata') and msg.response_metadata:
+                        msg_dict['response_metadata'] = msg.response_metadata
+                    
+                    serializable_messages.append(msg_dict)
+                else:
+                    serializable_messages.append({"id": "unknown", "type": "unknown", "content": str(msg)})
+
+            return {"messages": serializable_messages}
+
         return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {e}")
