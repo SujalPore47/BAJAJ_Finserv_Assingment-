@@ -100,10 +100,21 @@ async def chat(request: ChatRequest):
             serializable_messages = []
             for msg in response["messages"]:
                 if isinstance(msg, BaseMessage):
+                    
+                    content_str = ""
+                    if isinstance(msg.content, list):
+                        # Handle list of content parts (e.g., from multimodal output)
+                        for part in msg.content:
+                            if isinstance(part, dict) and 'text' in part:
+                                content_str += part['text']
+                    else:
+                        # Fallback for simple string content
+                        content_str = str(msg.content)
+
                     msg_dict = {
                         "id": str(msg.id),
                         "type": msg.type,
-                        "content": str(msg.content),  # Ensure content is always a string
+                        "content": content_str,  # Use the extracted string
                     }
                     if hasattr(msg, 'tool_calls') and msg.tool_calls:
                         msg_dict['tool_calls'] = msg.tool_calls
