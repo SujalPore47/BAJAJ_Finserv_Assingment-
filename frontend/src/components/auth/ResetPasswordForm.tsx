@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import Link from "next/link";
 
 export default function ResetPasswordForm() {
   const [password, setPassword] = useState("");
@@ -36,19 +39,37 @@ export default function ResetPasswordForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="space-y-6">
       <div>
-        <label htmlFor="password">New Password</label>
-        <input
+        <label
+          htmlFor="password"
+          className="text-sm font-medium text-slate-700 dark:text-slate-300"
+        >
+          New Password
+        </label>
+        <Input
           type="password"
           id="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
       </div>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {message && <p style={{ color: "green" }}>{message}</p>}
-      <button type="submit">Reset Password</button>
+      {error && <p className="text-sm text-red-500">{error}</p>}
+      {message && <p className="text-sm text-green-500">{message}</p>}
+      <Button type="submit">Reset Password</Button>
+      {message && (
+        <div className="text-sm text-center text-slate-600 dark:text-slate-400">
+          <p>
+            <Link
+              href="/login"
+              className="font-medium text-emerald-600 hover:underline"
+            >
+              Back to login
+            </Link>
+          </p>
+        </div>
+      )}
     </form>
   );
 }

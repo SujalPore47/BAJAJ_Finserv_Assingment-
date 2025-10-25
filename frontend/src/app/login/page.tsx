@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import Link from "next/link";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -23,7 +26,8 @@ export default function LoginPage() {
       });
 
       if (res.ok) {
-        router.push("/profile");
+        router.refresh();
+        router.push("/");
       } else {
         const data = await res.json();
         setError(data.error || "Something went wrong");
@@ -34,30 +38,65 @@ export default function LoginPage() {
   };
 
   return (
-    <div>
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+    <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-slate-900">
+      <div className="w-full max-w-md p-8 space-y-6 bg-white dark:bg-slate-800 rounded-lg shadow-md">
+        <h1 className="text-2xl font-bold text-center text-slate-900 dark:text-white">
+          Login to Bajaj AMC
+        </h1>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label
+              htmlFor="email"
+              className="text-sm font-medium text-slate-700 dark:text-slate-300"
+            >
+              Email
+            </label>
+            <Input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="password"
+              className="text-sm font-medium text-slate-700 dark:text-slate-300"
+            >
+              Password
+            </label>
+            <Input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          {error && <p className="text-sm text-red-500">{error}</p>}
+          <Button type="submit">Login</Button>
+        </form>
+        <div className="text-sm text-center text-slate-600 dark:text-slate-400">
+          <p>
+            Don't have an account?{" "}
+            <Link
+              href="/signup"
+              className="font-medium text-emerald-600 hover:underline"
+            >
+              Sign up
+            </Link>
+          </p>
+          <p>
+            <Link
+              href="/forgot-password"
+              className="font-medium text-emerald-600 hover:underline"
+            >
+              Forgot your password?
+            </Link>
+          </p>
         </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <button type="submit">Login</button>
-      </form>
+      </div>
     </div>
   );
 }
